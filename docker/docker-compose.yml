@@ -2,12 +2,17 @@ version: '3'
 services:
   server:
     build:
-      context: ..
+      context: ./meshcompute-cpp
       dockerfile: docker/Dockerfile.server
     ports:
-      - "8443:8443"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - ./certs:/etc/meshcompute/certs
+      - ./meshcompute-cpp/config/config.json:/etc/meshcompute/config.json
+      - ./meshcompute-cpp/certs:/etc/meshcompute/certs
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
   controller:
     build:
       context: ..

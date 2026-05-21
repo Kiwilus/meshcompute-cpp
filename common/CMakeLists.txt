@@ -11,3 +11,5 @@ target_link_libraries(common PUBLIC
     nlohmann_json::nlohmann_json
     spdlog::spdlog
 )
+
+target_compile_options(common PRIVATE -Wno-deprecated-declarations)
