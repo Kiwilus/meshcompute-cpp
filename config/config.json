@@ -1,0 +1,19 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 8443,
+        "tls_cert_file": "/etc/meshcompute/certs/server.crt",
+        "tls_key_file": "/etc/meshcompute/certs/server.key",
+        "admin_token_hash": "",
+        "registration_token_hash": ""
+    },
+    "controller": {
+        "server_url": "wss://localhost:8443",
+        "auth_token": ""
+    },
+    "bot": {
+        "server_url": "wss://localhost:8443",
+        "registration_token": "",
+        "bot_id": ""
+    }
+}

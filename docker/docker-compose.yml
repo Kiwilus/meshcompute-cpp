@@ -1,0 +1,26 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.server
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./certs:/etc/meshcompute/certs
+  controller:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.controller
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+  bot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.bot
+    deploy:
+      replicas: 2
+    depends_on:
+      - server
