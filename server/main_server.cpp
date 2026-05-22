@@ -2,6 +2,7 @@
 #include <boost/asio/ssl.hpp>
 #include <memory>
 #include <iostream>
+#include <thread>
 #include "hub.h"
 #include "client_handler.h"
 #include "common/config_manager.h"
@@ -27,16 +28,26 @@ int main(int argc, char* argv[]) {
         ssl_ctx.use_certificate_file(cert_file, net::ssl::context::pem);
         ssl_ctx.use_private_key_file(key_file, net::ssl::context::pem);
 
+        ssl_ctx.set_options(
+            net::ssl::context::default_workarounds |
+            net::ssl::context::no_sslv2 |
+            net::ssl::context::single_dh_use);
+        ssl_ctx.set_verify_mode(net::ssl::verify_none);
+
         tcp::acceptor acceptor(ioc, tcp::endpoint(net::ip::make_address(host), port));
         auto hub = std::make_shared<Hub>();
+
+        auto work_guard = net::make_work_guard(ioc);
+        std::thread ioc_thread([&ioc] { ioc.run(); });
 
         spdlog::info("Server starting on {}:{}", host, port);
         while (true) {
             tcp::socket socket(ioc);
             acceptor.accept(socket);
+            spdlog::info("New TCP connection accepted");
             std::make_shared<ClientHandler>(std::move(socket), ssl_ctx, hub, admin_hash, reg_hash)->start();
         }
-        ioc.run();
+        ioc_thread.join();
     } catch (std::exception& e) {
         spdlog::error("Server exception: {}", e.what());
         return 1;

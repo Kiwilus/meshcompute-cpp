@@ -3,7 +3,7 @@ add_library(common STATIC
     crypto_utils.cpp
 )
 
-target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(common PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(common PUBLIC
     Boost::system
     OpenSSL::SSL

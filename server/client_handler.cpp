@@ -3,6 +3,7 @@
 #include "common/crypto_utils.h"
 #include <spdlog/spdlog.h>
 #include <boost/beast/websocket/ssl.hpp>
+#include <openssl/err.h>
 
 ClientHandler::ClientHandler(tcp::socket&& socket, net::ssl::context& ssl_ctx,
                              std::shared_ptr<Hub> hub,
@@ -19,7 +20,10 @@ void ClientHandler::start() {
 
 void ClientHandler::on_handshake(beast::error_code ec) {
     if (ec) {
-        spdlog::error("Handshake failed: {}", ec.message());
+        unsigned long ssl_err = ERR_get_error();
+        char buf[256];
+        ERR_error_string_n(ssl_err, buf, sizeof(buf));
+        spdlog::error("Handshake failed: {} (OpenSSL: {})", ec.message(), buf);
         return;
     }
     spdlog::info("WebSocket connection accepted");
