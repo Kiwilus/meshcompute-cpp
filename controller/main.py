@@ -5,13 +5,21 @@ import base64
 import ssl
 import websockets
 from colorama import init, Fore, Style
+from dotenv import load_dotenv
 
 init(autoreset=True)
 
-# ---------- KONFIGURATION ----------
-SERVER_URL = "wss://192.168.1.188:8443"   # ← anpassen, falls nötig
-AUTH_TOKEN = "a21cbacb60e90af34ea03b65018980d95c5f4e7dfd708da1eb64d1fab26f6a53"           # ← Klartext-Token aus dem Server-Setup
-# ------------------------------------
+load_dotenv()
+
+# configuration from .env
+SERVER_URL = os.getenv("SERVER_URL")
+AUTH_TOKEN = os.getenv("AUTH_TOKEN")
+
+if not SERVER_URL or not AUTH_TOKEN:
+    print(f"{Fore.RED}[-] Fehler: SERVER_URL oder AUTH_TOKEN fehlt in .env{Style.RESET_ALL}")
+    exit(1)
+
+
 
 INTRO = f"""{Fore.CYAN}
 =====================================

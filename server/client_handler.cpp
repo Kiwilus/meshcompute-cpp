@@ -13,9 +13,20 @@ ClientHandler::ClientHandler(tcp::socket&& socket, net::ssl::context& ssl_ctx,
       admin_token_hash_(admin_hash), registration_token_hash_(reg_hash) {}
 
 void ClientHandler::start() {
-    ws_.async_accept([self = shared_from_this()](beast::error_code ec) {
-        self->on_handshake(ec);
-    });
+    // Step 1: TLS handshake first
+    ws_.next_layer().async_handshake(
+        net::ssl::stream_base::server,
+        [self = shared_from_this()](beast::error_code ec) {
+            if (ec) {
+                spdlog::error("TLS handshake failed: {}", ec.message());
+                return;
+            }
+            spdlog::info("TLS handshake OK");
+            // Step 2: WebSocket handshake
+            self->ws_.async_accept([self](beast::error_code ec) {
+                self->on_handshake(ec);
+            });
+        });
 }
 
 void ClientHandler::on_handshake(beast::error_code ec) {
