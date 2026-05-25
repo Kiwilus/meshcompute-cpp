@@ -1,25 +1,22 @@
 #pragma once
-#include "transport_interface.h"
-#include <boost/asio.hpp>
-#include <memory>
+#include "meshcompute/network/transport/transport_interface.h"
+#include <unordered_map>
+#include <thread>
+#include <atomic>
 
-namespace meshcompute {
+namespace meshcompute::network::transport {
 
-class TcpTransport : public ITransport {
+class TcpTransport : public TransportInterface {
 public:
-    TcpTransport(boost::asio::io_context& ioc);
-    bool connect(const std::string& address, uint16_t port) override;
-    void disconnect() override;
-    bool is_connected() const override;
-    void send(const std::vector<uint8_t>& data) override;
-    void set_receive_callback(ReceiveCallback cb) override;
-    std::string transport_type() const override { return "tcp"; }
+    void send(const std::string& peer_id, const std::vector<uint8_t>& data) override;
+    void on_receive(RecvCallback cb) override;
+    void start();
+    void stop();
+    
 private:
-    boost::asio::io_context& ioc_;
-    boost::asio::ip::tcp::socket socket_;
-    ReceiveCallback recv_cb_;
-    std::vector<uint8_t> recv_buffer_;
-    void do_read();
+    void accept_loop();
+    std::atomic<bool> running_{false};
+    std::unordered_map<std::string, RecvCallback> recv_callbacks_;
 };
 
-} // namespace meshcompute
+} // namespace meshcompute::network::transport

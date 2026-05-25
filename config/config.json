@@ -1,0 +1,7 @@
+{
+    "bot": {
+        "server_url": "wss://192.168.1.188:8443",
+        "registration_token": "8b82b94f6cd14cdeb320c09b9cd6ca2b1b8871a381a8dd9ce94e0ba0b5f7ff98",
+        "bot_id": "bot-01"
+    }
+}

@@ -1,22 +1,23 @@
 #!/bin/bash
+# Cross-Compile für Windows mit MinGW-w64 (auf Linux ausgeführt)
 set -e
+sudo apt install -y mingw-w64
 
-cd "$(dirname "$0")/.."
+TOOLCHAIN=$(pwd)/scripts/toolchain-mingw.cmake
+cat > $TOOLCHAIN << 'EOF'
+set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+EOF
 
-BUILD_DIR="build-node-windows"
-echo "Building meshcompute-node for Windows (MinGW)..."
-
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
-
-cmake .. \
-    -DCMAKE_TOOLCHAIN_FILE=../windows/toolchain-mingw.cmake \
-    -DBUILD_SERVER=OFF \
-    -DBUILD_CONTROLLER=OFF \
-    -DBUILD_BOT=OFF \
-    -DBUILD_NODE=ON \
-    -DCMAKE_BUILD_TYPE=Release
-
-cmake --build . --target meshcompute-node-exec -j$(nproc)
-
-echo "✅ Node binary created at: $(pwd)/node/meshcompute-node-exec.exe"
+BUILD_DIR="build/windows"
+mkdir -p $BUILD_DIR
+cmake -B $BUILD_DIR \
+    -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_NODE=ON -DBUILD_LEGACY=OFF
+cmake --build $BUILD_DIR -- -j$(nproc)
+echo "Windows .exe unter $BUILD_DIR/src/mesh-node.exe"
