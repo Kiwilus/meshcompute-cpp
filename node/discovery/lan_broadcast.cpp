@@ -1,4 +1,4 @@
-#include "node/discovery/lan_broadcast.h"
+#include "meshcompute/discovery/lan_broadcast.h"
 #include <boost/asio.hpp>
 #include <spdlog/spdlog.h>
 #include <nlohmann/json.hpp>

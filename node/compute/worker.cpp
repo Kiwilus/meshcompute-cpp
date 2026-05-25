@@ -1,4 +1,4 @@
-#include "node/compute/worker.h"
+#include "meshcompute/compute/worker.h"
 
 namespace meshcompute {
 

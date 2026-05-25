@@ -1,4 +1,4 @@
-#include "node/security/channel_encryption.h"
+#include "meshcompute/security/channel_encryption.h"
 #include <sodium.h>
 #include <stdexcept>
 

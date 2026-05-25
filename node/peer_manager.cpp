@@ -1,4 +1,4 @@
-#include "node/peer_manager.h"
+#include "meshcompute/peer_manager.h"
 #include <spdlog/spdlog.h>
 
 namespace meshcompute {

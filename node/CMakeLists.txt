@@ -1,37 +1,29 @@
-cmake_minimum_required(VERSION 3.14)
-
-# Collect source files
-file(GLOB_RECURSE NODE_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+file(GLOB NODE_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/compute/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/discovery/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/transport/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/security/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/*.cpp
 )
 
-add_library(meshcompute-node STATIC ${NODE_SOURCES})
-
-target_include_directories(meshcompute-node
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${CMAKE_CURRENT_SOURCE_DIR}
+add_library(mesh_node_lib ${NODE_SOURCES})
+target_include_directories(mesh_node_lib PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${Boost_INCLUDE_DIRS}
+    ${SODIUM_INCLUDE}
+)
+target_link_libraries(mesh_node_lib PUBLIC
+    Boost::thread
+    pthread
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    nlohmann_json::nlohmann_json
+    spdlog::spdlog
+    ${SODIUM_LIB}
+    protobuf::libprotobuf
 )
 
-target_link_libraries(meshcompute-node
-    PUBLIC
-        meshcompute-common
-        Boost::system
-        Boost::thread
-        OpenSSL::SSL
-        OpenSSL::Crypto
-        sodium
-        nlohmann_json::nlohmann_json
-        spdlog::spdlog
-)
-
-# Main executable for a standalone mesh node
-add_executable(meshcompute-node-exec main_node.cpp)
-target_link_libraries(meshcompute-node-exec PRIVATE meshcompute-node)
-
-# Copy example config if building
-configure_file(
-    ${CMAKE_SOURCE_DIR}/config/mesh_node.json
-    ${CMAKE_BINARY_DIR}/mesh_node.json
-    COPYONLY
-)
+add_executable(mesh-node main_node.cpp)
+target_link_libraries(mesh-node PRIVATE mesh_node_lib)

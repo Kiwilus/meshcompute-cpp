@@ -1,4 +1,4 @@
-#include "node/compute/scheduler.h"
+#include "meshcompute/compute/scheduler.h"
 #include <spdlog/spdlog.h>
 
 namespace meshcompute {

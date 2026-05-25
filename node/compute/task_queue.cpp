@@ -1,4 +1,4 @@
-#include "node/compute/task_queue.h"
+#include "meshcompute/compute/task_queue.h"
 #include <algorithm>
 
 namespace meshcompute {

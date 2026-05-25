@@ -1,4 +1,4 @@
-#include "node/api/event_bus.h"
+#include "meshcompute/api/event_bus.h"
 #include <algorithm>
 
 namespace meshcompute {

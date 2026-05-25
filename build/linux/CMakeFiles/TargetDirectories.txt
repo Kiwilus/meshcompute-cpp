@@ -1,0 +1,6 @@
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/CMakeFiles/edit_cache.dir
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/CMakeFiles/rebuild_cache.dir
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/node/CMakeFiles/mesh_node_lib.dir
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/node/CMakeFiles/mesh-node.dir
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/node/CMakeFiles/edit_cache.dir
+/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/node/CMakeFiles/rebuild_cache.dir

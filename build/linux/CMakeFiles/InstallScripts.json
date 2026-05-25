@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/cmake_install.cmake",
+		"/home/vboxuser/Schreibtisch/meshcompute-cpp/build/linux/node/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,4 +1,4 @@
-#include "node/node_core.h"
+#include "meshcompute/node_core.h"
 #include <spdlog/spdlog.h>
 #include <boost/asio.hpp>
 #include <chrono>
